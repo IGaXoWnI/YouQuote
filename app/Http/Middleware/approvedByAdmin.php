@@ -7,25 +7,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
-class check_delete_gate
+class approvedByAdmin
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
 
-        $citation = $request->route('citation');
-
-        // Check if the gate denies access to the citation
-        if (Gate::denies("delete_citation", $citation)) {
+        if(Gate::denies("approve_citation")){
             return response()->json([
-                "message" => "You don't have permission to delete this citation."
+                "message" => "You don't have permission to approve this citation."
             ], 403);
         }
-
         return $next($request);
     }
 }

@@ -22,15 +22,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define("delete_citation" , function(User $user , Citation $citation){
-            return $user->id === $citation->user_id ;
+        Gate::define("manage_citation" , function(User $user , Citation $citation){
+            return $user->id === $citation->user_id || $user->role === 'admin';
         } );
+        Gate::define("approve_citation" , function(User $user){
+            return $user->role === 'admin';
+        } );
+
+
+        
 
         
 
       
-        Gate::define("update_citation", function(User $user, Citation $citation) {
-            return $user->id === $citation->user_id || $user->role === 'admin';
-        });
+       
     }
 }

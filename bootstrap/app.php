@@ -16,12 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(EnsureFrontendRequestsAreStateful::class);
         $middleware->alias([
-            'check_delete_gate' => App\Http\Middleware\check_delete_gate::class,
-            'admin' => App\Http\Middleware\adminMiddleware::class,
+            'manage_citation' => App\Http\Middleware\manageCitation::class,
+            'approve_citation' => App\Http\Middleware\approvedByAdmin::class,
+            
 
 
         ]);
-        
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

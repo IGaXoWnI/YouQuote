@@ -65,13 +65,6 @@ class CitationController extends Controller
     public function updateCitation(Request $request, Citation $citation)
     {
 
-        // if ($request->user()->id !== $citation->user_id) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'you dont have permission'
-        //     ], Response::HTTP_FORBIDDEN);
-        // }
-
         if (Gate::denies('update_citation', $citation)) {
             return response()->json(['message' => 'You do not have permission to update this citation'], 403);
         }
@@ -92,23 +85,9 @@ class CitationController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroyCitation(Request $request, Citation $citation)
-    {
-        // if ($request->user()->id !== $citation->user_id) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Vous n\'êtes pas autorisé à supprimer cette citation'
-        //     ], 403);
-        // }
 
-        if (Gate::denies("delete_citation", $citation)) {
-            return response()->json([
-                "message" => "machi dyalk"
-            ], 403);
-        }
+    public function destroyCitation(Citation $citation)
+    {
 
         $citation->delete();
 
@@ -142,5 +121,20 @@ class CitationController extends Controller
         });
 
         return response()->json($quotes);
+    }
+
+
+    public function approveByAdmin(Citation $citation)
+    {
+
+
+        $citation->status = 'approved';
+        $citation->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Citation approuvée avec succès',
+            'data' => $citation
+        ], 201);
     }
 }

@@ -16,16 +16,11 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/citations', [CitationController::class, 'storeCitation']);
-    Route::put('/citations/{citation}', [CitationController::class, 'updateCitation']);
-    Route::delete('/citations/{citation}', [CitationController::class, 'destroyCitation'])->middleware('check_delete_gate');
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::patch('/citations/{citation}/approve', [CitationController::class, 'approveByAdmin'])->middleware('approve_citation');
 });
 
-Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
-
-    Route::get('/citations', [CitationController::class, 'getAllCitations']);
-    Route::get('/citations/{citation}', [CitationController::class, 'showCitation']);
-    Route::post('/citations', [CitationController::class, 'storeCitation']);
+Route::middleware(['auth:sanctum', 'manage_citation'])->group(function () {
     Route::put('/citations/{citation}', [CitationController::class, 'updateCitation']);
     Route::delete('/citations/{citation}', [CitationController::class, 'destroyCitation']);
 });
