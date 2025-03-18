@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Citation;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class CitationController extends Controller
 {
@@ -64,11 +65,15 @@ class CitationController extends Controller
     public function updateCitation(Request $request, Citation $citation)
     {
 
-        if ($request->user()->id !== $citation->user_id) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'you dont have permission'
-            ], Response::HTTP_FORBIDDEN);
+        // if ($request->user()->id !== $citation->user_id) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'you dont have permission'
+        //     ], Response::HTTP_FORBIDDEN);
+        // }
+
+        if (Gate::denies('update_citation', $citation)) {
+            return response()->json(['message' => 'You do not have permission to update this citation'], 403);
         }
 
         $validated = $request->validate([
@@ -92,10 +97,16 @@ class CitationController extends Controller
      */
     public function destroyCitation(Request $request, Citation $citation)
     {
-        if ($request->user()->id !== $citation->user_id) {
+        // if ($request->user()->id !== $citation->user_id) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Vous n\'êtes pas autorisé à supprimer cette citation'
+        //     ], 403);
+        // }
+
+        if (Gate::denies("delete_citation", $citation)) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Vous n\'êtes pas autorisé à supprimer cette citation'
+                "message" => "machi dyalk"
             ], 403);
         }
 

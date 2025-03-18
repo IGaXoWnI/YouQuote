@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role' ,
     ];
 
     /**
@@ -53,5 +54,17 @@ class User extends Authenticatable
     public function citations()
     {
         return $this->hasMany(Citation::class);
+    }
+
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    
+    public function isUser()
+    {
+        return $this->role === 'user';
     }
 }

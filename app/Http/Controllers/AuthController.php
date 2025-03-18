@@ -15,12 +15,14 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:8',
+            'role' => 'sometimes|string|in:admin,user',
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role ?? 'user',
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -42,6 +44,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Invalid login credentials',
             ], 401);
+            
         }
 
         $user = $request->user();
