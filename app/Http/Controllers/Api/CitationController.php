@@ -29,15 +29,28 @@ class CitationController extends Controller
     public function storeCitation(Request $request)
     {
         $validated = $request->validate([
+
             'content' => 'required|string',
-            'author' => 'nullable|string|max:255'
+            'author' => 'nullable|string|max:255',
+            'categories' => 'nullable|array',
+            'tags' => 'nullable|array'
         ]);
 
-        if ($request->user()) {
-            $validated['user_id'] = $request->user()->id;
+
+
+        $citation = Citation::create([
+            "user_id" => $request->user()->id,
+            'content' => $validated['content'],
+            'author' => $validated['author'],
+        ]);
+
+        if (!empty($validated['categories'])) {
+            $citation->categories()->sync($validated['categories']);
         }
 
-        $citation = Citation::create($validated);
+        if (!empty($validated["tags"])) {
+            $citation->tags()->sync($validated['tags']);
+        }
 
         return response()->json([
             'status' => 'success',

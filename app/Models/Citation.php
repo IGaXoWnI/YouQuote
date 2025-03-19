@@ -37,4 +37,13 @@ class Citation extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, "citation_categories")->withTimestamps();
+    }
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, "citation_tags")->withTimestamps();
+    }
 }

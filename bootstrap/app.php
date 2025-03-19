@@ -16,8 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(EnsureFrontendRequestsAreStateful::class);
         $middleware->alias([
-            'manage_citation' => App\Http\Middleware\manageCitation::class,
-            'approve_citation' => App\Http\Middleware\approvedByAdmin::class,
+            'user_permissions' => App\Http\Middleware\userMiddleware::class,
+            'admin_permissions' => App\Http\Middleware\adminMiddleware::class,
             
 
 
